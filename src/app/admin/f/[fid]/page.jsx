@@ -11,36 +11,78 @@ import { TableHead, TableRow, TableHeader, TableCell, TableBody, Table } from "@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CardContent, Card } from "@/components/ui/card"
-import { ChevronRightIcon, ChevronsRightIcon, DownloadIcon, FileEditIcon, FileIcon, FolderIcon, PlusIcon, SearchIcon, TrashIcon } from "@/components/Icons"
+import { ChevronLeftIcon, ChevronRightIcon, ChevronsRightIcon, DownloadIcon, FileEditIcon, FileIcon, FolderIcon, PlusIcon, SearchIcon, TrashIcon } from "@/components/Icons"
 import Link from "next/link"
 import { Label } from "@/components/ui/label"
 import { useState } from "react"
-import { app, db } from "@/libs/firebaseConfig"
-import { addDoc, collection, serverTimestamp } from "firebase/firestore"
+import { app, auth, db } from "@/libs/firebaseConfig"
+import { addDoc, collection, serverTimestamp,doc,deleteDoc } from "firebase/firestore"
 import useFetchAll from "@/hooks/useFetchAll"
 import SearchableSelect from "@/components/SearchableSelect"
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage"
 
 import { uuid} from 'uuidv4';
+import { useRouter } from "next/navigation"
+import { authenticate, useAuthenticate } from "@/libs/useAth"
+import { signOut } from "firebase/auth"
+import Errors from "@/components/Errors"
+import Swal from "sweetalert2"
 const storage = getStorage(app)
 
 export default function Component({params}) {
  
 // hooks=============================
-
+ useAuthenticate()
+const role = localStorage.getItem("role")
+console.log(role)
 const {cards,isPendingC,isErrorC} = useFetchAll('documents',params.fid)
 console.log(cards)
 // states ==============================
+const router = useRouter()
 const v4 = uuid()
 const [selectedOption, setSelectedOption] = useState(null);
 const [folderName,setFolder] = useState('')
 const [files, setFiles] = useState([]);
 const [progress, setProgress] = useState({});
 const [error, setError] = useState(null);
+const [success, setSuccess] = useState(null);
 
 
 
   // functions===========================
+  const handleLogout = () =>{
+    signOut(auth).then(() => {
+      localStorage.clear();
+      router.push('../')
+    }).catch((error) => {
+      alert("something went wrong")
+    });
+    
+  }
+  const handleDelete = (id) => {
+    
+    const docRef = doc(db, 'documents', id)
+    deleteDoc(docRef).then(() => {
+      Swal.fire({
+        title: 'Success!',
+        text: 'Deleted successifully',
+        icon: 'success',
+        confirmButtonText: 'close'
+      })
+     
+  }).catch(e => {
+      
+      Swal.fire({
+        title: 'Error!',
+        text: `${e.message}`,
+        icon: 'error',
+        confirmButtonText: 'Close'
+      })
+     
+  })
+  }
+  
+  
   const handleChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
     setFiles(selectedFiles);
@@ -80,7 +122,7 @@ const [error, setError] = useState(null);
             }
             const depoRef = collection(db, "documents")
             addDoc(depoRef, document).then(() => {
-             setError("success")
+            setSuccess("documents Uploaded")
               
             }).catch((e) => {
                alert("error uploading document")
@@ -102,7 +144,7 @@ const [error, setError] = useState(null);
     console.log(selectedOption.id)
    
     // navigate here
-    router.push(`${domainp}/${tag}/${selectedOption.id}`)
+    router.push(`${selectedOption.url}`)
 
   };
 
@@ -120,43 +162,47 @@ const [error, setError] = useState(null);
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-6 h-6 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </label>
       </div> 
-      <div className="flex-1 px-2 mx-2">Navbar Title</div>
+      <div className="flex-1 px-2 mx-2"><h2>DocSTORE</h2></div>
       <div className="flex-none hidden lg:block">
         <ul className="menu menu-horizontal">
           {/* Navbar menu content here */}
+         
           <li>
-          <Link className="flex items-center gap-2 font-medium rounded-md p-3" href="/clients">
+          <Link className="flex items-center gap-2 font-medium rounded-md p-3" href="/admin/dashboard">
                   <FolderIcon className="w-4 h-4" />
-                  <span className="peer">My Documents</span>
-          </Link>
-          </li>
-          <li>
-          <Link className="flex items-center gap-2 font-medium rounded-md p-3" href="/clients">
-                  <FolderIcon className="w-4 h-4" />
-                  <span className="peer">My Documents</span>
+                  <span className="peer">Folders</span>
           </Link>
           </li>
          <li>
-         <Button className="w-full" variant="outline" onClick={()=>document.getElementById('my_modal_3').showModal()} >
-              <PlusIcon className="w-4 h-4 mr-2" />
-              New File
-          </Button>
-         </li>
+        {role == 'admin' && (
+           <Button className="w-full" variant="outline" onClick={()=>document.getElementById('my_modal_3').showModal()} >
+           <PlusIcon className="w-4 h-4 mr-2" />
+           New Document
+       </Button>
+     
+        )}
+        </li>
+        <li>
+        <Button onClick={handleLogout} className="w-full">Logout</Button>
+        </li>
         </ul>
       </div>
     </div>
     {/* Page content here */}
     <div className="flex-1 flex flex-col min-h-0">
           <header className="flex items-center gap-4 p-4 border-b min-h-0">
-            <Button className="rounded-full md:hidden" size="icon" variant="ghost">
-              <ChevronRightIcon className="w-6 h-6" />
+            <Link  href="/admin/dashboard" className="rounded-full md:hidden" size="icon" variant="ghost">
+              
+              <ChevronLeftIcon className="w-6 h-6" />
               <span className="sr-only">Toggle sidebar</span>
-            </Button>
+            </Link>
             <h1 className="text-lg font-semibold">{params.fid}</h1>
             <form className="flex items-center gap-2 ml-auto">
               <SearchIcon className="w-4 h-4 text-gray-500" />
               <SearchableSelect
-          tag={'folders'}
+            
+          tag={'documents'}
+          fil={params.fid}
            value={selectedOption}
            onChange={handlesearch}
            placeholder={selectedOption}
@@ -169,104 +215,29 @@ const [error, setError] = useState(null);
             <Table key="1" className="min-w-[300px] w-full">
      
       <TableBody className="text-xs">
-        <TableRow className="hover:translate-y-0.5 hover:shadow-md transition-all">
-          <TableCell className="font-medium">INV001</TableCell>
-          <TableCell>Paid</TableCell>
-          <TableCell>$250.00</TableCell>
+      {cards.map(card =>(
+          <TableRow key={card.id} className="hover:translate-y-0.5 hover:shadow-md transition-all">
+          <TableCell className="font-medium">{card.label}</TableCell>
+        
+          
           <TableCell className="flex justify-end gap-2">
-            <Button size="icon" variant="ghost">
+           <Link href={card.url} target="_blank" >
+           <Button size="icon" variant="ghost">
               <DownloadIcon className="h-4 w-4" />
-              <span className="sr-only">Edit</span>
+              <span className="sr-only">Download</span>
             </Button>
-            <Button size="icon" variant="ghost">
-              <TrashIcon className="h-4 w-4" />
+           </Link>
+          {role == "admin" && (  <Button size="icon" variant="ghost" color="red" onClick={()=>{handleDelete(card.id)}}>
+              <TrashIcon className="h-4 w-4"  color="red"/>
               <span className="sr-only">Delete</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <ChevronsRightIcon className="h-4 w-4" />
-              <span className="sr-only">View details</span>
-            </Button>
+            </Button>)}
+          
           </TableCell>
         </TableRow>
-        <TableRow className="hover:translate-y-0.5 hover:shadow-md transition-all">
-          <TableCell className="font-medium">INV002</TableCell>
-          <TableCell>Pending</TableCell>
-          <TableCell>$150.00</TableCell>
-          <TableCell className="flex justify-end gap-2">
-            <Button size="icon" variant="ghost">
-              <FileEditIcon className="h-4 w-4" />
-              <span className="sr-only">Edit</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <TrashIcon className="h-4 w-4" />
-              <span className="sr-only">Delete</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <ChevronsRightIcon className="h-4 w-4" />
-              <span className="sr-only">View details</span>
-            </Button>
-          </TableCell>
-        </TableRow>
-        <TableRow className="hover:translate-y-0.5 hover:shadow-md transition-all">
-          <TableCell className="font-medium">INV003</TableCell>
-          <TableCell>Unpaid</TableCell>
-          <TableCell>$350.00</TableCell>
-          <TableCell className="flex justify-end gap-2">
-            <Button size="icon" variant="ghost">
-              <FileEditIcon className="h-4 w-4" />
-              <span className="sr-only">Edit</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <TrashIcon className="h-4 w-4" />
-              <span className="sr-only">Delete</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <ChevronsRightIcon className="h-4 w-4" />
-              <span className="sr-only">View details</span>
-            </Button>
-          </TableCell>
-        </TableRow>
-        <TableRow className="hover:translate-y-0.5 hover:shadow-md transition-all">
-          <TableCell className="font-medium">INV004</TableCell>
-          <TableCell>Paid</TableCell>
-          <TableCell>$450.00</TableCell>
-          <TableCell className="flex justify-end gap-2">
-            <Button size="icon" variant="ghost">
-              <FileEditIcon className="h-4 w-4" />
-              <span className="sr-only">Edit</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <TrashIcon className="h-4 w-4" />
-              <span className="sr-only">Delete</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <ChevronsRightIcon className="h-4 w-4" />
-              <span className="sr-only">View details</span>
-            </Button>
-          </TableCell>
-        </TableRow>
-        <TableRow className="hover:translate-y-0.5 hover:shadow-md transition-all">
-          <TableCell className="font-medium">INV005</TableCell>
-          <TableCell>Paid</TableCell>
-          <TableCell>$550.00</TableCell>
-          <TableCell className="flex justify-end gap-2">
-            <Button size="icon" variant="ghost">
-              <FileEditIcon className="h-4 w-4" />
-              <span className="sr-only">Edit</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <TrashIcon className="h-4 w-4" />
-              <span className="sr-only">Delete</span>
-            </Button>
-            <Button size="icon" variant="ghost">
-              <ChevronsRightIcon className="h-4 w-4" />
-              <span className="sr-only">View details</span>
-            </Button>
-          </TableCell>
-        </TableRow>
+      ))}
       </TableBody>
     </Table>
- 
+    <Errors data={cards} loading={isPendingC} error={isErrorC} />
 
           
           </div>
@@ -276,24 +247,25 @@ const [error, setError] = useState(null);
     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label> 
     <ul className="menu p-4 w-80 min-h-full bg-base-200">
       {/* Sidebar content here */}
-      <li>
-      <Link className="flex items-center gap-2 font-medium rounded-md p-3" href="/clients">
-                  <FolderIcon className="w-4 h-4" />
-                  <span className="peer">My Documents</span>
-          </Link>
-      </li>
+     
         <li>
-        <Link className="flex items-center gap-2 font-medium rounded-md p-3" href="/clients">
+        <Link className="flex items-center gap-2 font-medium rounded-md p-3"  href="/admin/dashboard">
                   <FolderIcon className="w-4 h-4" />
                   <span className="peer">Folders</span>
           </Link>
         </li>
         <li>
-         <Button className="w-full" variant="outline" onClick={()=>document.getElementById('my_modal_3').showModal()} >
-              <PlusIcon className="w-4 h-4 mr-2" />
-              New File
-          </Button>
-         </li>
+        {role == 'admin' && (
+           <Button className="w-full" variant="outline" onClick={()=>document.getElementById('my_modal_3').showModal()} >
+           <PlusIcon className="w-4 h-4 mr-2" />
+           New Document
+       </Button>
+     
+        )}
+        </li>
+        <li>
+        <Button onClick={handleLogout} className="w-full">Logout</Button>
+        </li>
     </ul>
   </div>
 </div>
@@ -319,10 +291,11 @@ const [error, setError] = useState(null);
   </div>
   {Object.keys(progress).map((fileName) => (
         <div key={fileName}>
-          {fileName}: {progress[fileName]}%
+          <small>{fileName}: {progress[fileName]}%</small>
         </div>
       ))}
       {error && <div style={{ color: 'red' }}>{error}</div>}
+      {success && <div style={{ color: 'green' }}>{success}</div>}
  </form>
 
 
