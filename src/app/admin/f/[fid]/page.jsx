@@ -30,7 +30,7 @@ import Swal from "sweetalert2"
 const storage = getStorage(app)
 
 export default function Component({params}) {
-  useAuthenticate()
+  // useAuthenticate()
 // hooks=============================
 
 
@@ -220,7 +220,8 @@ const [success, setSuccess] = useState(null);
       <TableBody className="text-xs">
       {cards.map(card =>(
           <TableRow key={card.id} className="hover:translate-y-0.5 hover:shadow-md transition-all">
-          <TableCell className="font-medium">{card.label}</TableCell>
+          <TableCell className="font-medium"><FileIcon  className="w-5 h-6 text-gray-500" /></TableCell>
+          <TableCell className="font-medium"><Link href={card.url} target="_blank" >{card.label}</Link></TableCell>
         
           
           <TableCell className="flex justify-end gap-2">

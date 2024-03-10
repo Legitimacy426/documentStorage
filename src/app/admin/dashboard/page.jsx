@@ -25,7 +25,7 @@ import Swal from "sweetalert2"
 
 export default function Component() {
 
- useAuthenticate()
+//  useAuthenticate()
 // hooks=============================
 
 
@@ -35,7 +35,7 @@ export default function Component() {
    
 
 const {cards,isPendingC,isErrorC} = useFetchAll('folders',undefined)
-console.log(cards)
+
 // states ==============================
 const router = useRouter()
 const [selectedOption, setSelectedOption] = useState(null);
