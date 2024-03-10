@@ -12,7 +12,7 @@ import { CardContent, Card } from "@/components/ui/card"
 import { ChevronRightIcon, FileIcon, FolderIcon, PlusIcon, SearchIcon, TrashIcon } from "@/components/Icons"
 import Link from "next/link"
 import { Label } from "@/components/ui/label"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { auth, db } from "@/libs/firebaseConfig"
 import { addDoc, collection, deleteDoc, doc, serverTimestamp } from "firebase/firestore"
 import useFetchAll from "@/hooks/useFetchAll"
@@ -24,10 +24,19 @@ import Errors from "@/components/Errors"
 import Swal from "sweetalert2"
 
 export default function Component() {
-
+ useAuthenticate()
 // hooks=============================
-useAuthenticate()
-const role = localStorage.getItem("role")
+let role
+if(typeof window !== 'undefined'){
+  // now access your localStorage
+ 
+  role = localStorage.getItem("role")
+}
+
+
+ 
+   
+
 const {cards,isPendingC,isErrorC} = useFetchAll('folders',undefined)
 console.log(cards)
 // states ==============================
