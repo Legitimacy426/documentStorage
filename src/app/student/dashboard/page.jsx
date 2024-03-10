@@ -23,7 +23,7 @@ import { signOut } from "firebase/auth"
 import Errors from "@/components/Errors"
 import Swal from "sweetalert2"
 
-export default function Component() {
+export default function Student() {
  
 //  useAuthenticate()
 // hooks=============================

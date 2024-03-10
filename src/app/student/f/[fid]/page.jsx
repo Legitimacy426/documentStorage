@@ -181,7 +181,7 @@ const [success, setSuccess] = useState(null);
     {/* Page content here */}
     <div className="flex-1 flex flex-col min-h-0">
           <header className="flex items-center gap-4 p-4 border-b min-h-0">
-            <Link  href="/admin/dashboard" className="rounded-full md:hidden" size="icon" variant="ghost">
+            <Link  href="/student/dashboard" className="rounded-full md:hidden" size="icon" variant="ghost">
               
               <ChevronLeftIcon className="w-6 h-6" />
               <span className="sr-only">Toggle sidebar</span>
