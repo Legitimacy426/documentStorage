@@ -87,7 +87,7 @@ const {cards,isPendingC,isErrorC} = useFetchAll('folders',undefined)
           </div>
           <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
       {cards?.map(card =>(
-        <Link  href={`/student/f/${card.folderName}`}>
+        <Link  href={`/student/f/${card.folderName}`} key={card.id}>
         <div className="flex flex-col">
         <Card className="shadow-sm hover:shadow-md">
           <CardContent className="flex flex-col items-center gap-2 p-6">
