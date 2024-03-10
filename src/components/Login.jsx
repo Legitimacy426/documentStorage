@@ -50,7 +50,7 @@ setError("")
    }else{
    const role = 'student'
     localStorage.setItem("role", role);
-    router.push('admin/dashboard')
+    router.push('student/dashboard')
    }
       // ...
     })

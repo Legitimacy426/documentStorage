@@ -24,7 +24,7 @@ import Errors from "@/components/Errors"
 import Swal from "sweetalert2"
 
 export default function Component() {
-
+ 
  useAuthenticate()
 // hooks=============================
 
@@ -136,16 +136,6 @@ const [folderName,setFolder] = useState('')
       <div className="flex-none hidden lg:block">
         <ul className="menu menu-horizontal">
     
-         
-          
-         
-     
-        <li>
-        <Button className="w-full" variant="outline" onClick={()=>document.getElementById('my_modal_3').showModal()} >
-              <PlusIcon className="w-4 h-4 mr-2" />
-              New Folder
-          </Button> 
-        </li>
       
          <li>
         <Button onClick={handleLogout} className="w-full">Logout</Button>
@@ -182,8 +172,6 @@ const [folderName,setFolder] = useState('')
                </CardContent>
                </Link>
              
-                    <TrashIcon className="absolute top-2 right-2  w-4 h-4 text-red-500 hover:opacity-100 transition-opacity focus:outline-none" onClick={()=>{handleDelete(card.id)}}/>
-              
              </Card>
              ))}
              
@@ -195,17 +183,7 @@ const [folderName,setFolder] = useState('')
   <div className="drawer-side">
     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label> 
     <ul className="menu p-4 w-80 min-h-full bg-base-200">
-   
-     
-        
-  
     <li>
-        <Button className="w-full" variant="outline" onClick={()=>document.getElementById('my_modal_3').showModal()} >
-              <PlusIcon className="w-4 h-4 mr-2" />
-              New Folder
-          </Button> 
-        </li>
-         <li>
         <Button onClick={handleLogout} className="w-full">Logout</Button>
         </li>
     </ul>

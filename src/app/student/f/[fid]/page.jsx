@@ -33,11 +33,6 @@ export default function Component({params}) {
   useAuthenticate()
 // hooks=============================
 
-
-
- 
-   
-
 const {cards,isPendingC,isErrorC} = useFetchAll('documents',params.fid)
 console.log(cards)
 // states ==============================
@@ -176,15 +171,7 @@ const [success, setSuccess] = useState(null);
                   <span className="peer">Folders</span>
           </Link>
           </li>
-         <li>
        
-           <Button className="w-full" variant="outline" onClick={()=>document.getElementById('my_modal_3').showModal()} >
-           <PlusIcon className="w-4 h-4 mr-2" />
-           New Document
-       </Button>
-     
-    
-        </li>
         <li>
         <Button onClick={handleLogout} className="w-full">Logout</Button>
         </li>
@@ -230,10 +217,7 @@ const [success, setSuccess] = useState(null);
               <span className="sr-only">Download</span>
             </Button>
            </Link>
-        <Button size="icon" variant="ghost" color="red" onClick={()=>{handleDelete(card.id)}}>
-              <TrashIcon className="h-4 w-4"  color="red"/>
-              <span className="sr-only">Delete</span>
-            </Button>
+        
           
           </TableCell>
         </TableRow>
@@ -252,20 +236,12 @@ const [success, setSuccess] = useState(null);
       {/* Sidebar content here */}
      
         <li>
-        <Link className="flex items-center gap-2 font-medium rounded-md p-3"  href="/admin/dashboard">
+        <Link className="flex items-center gap-2 font-medium rounded-md p-3"  href="/student/dashboard">
                   <FolderIcon className="w-4 h-4" />
                   <span className="peer">Folders</span>
           </Link>
         </li>
-        <li>
-     
-           <Button className="w-full" variant="outline" onClick={()=>document.getElementById('my_modal_3').showModal()} >
-           <PlusIcon className="w-4 h-4 mr-2" />
-           New Document
-       </Button>
-     
-       
-        </li>
+      
         <li>
         <Button onClick={handleLogout} className="w-full">Logout</Button>
         </li>

@@ -2,7 +2,7 @@
 
 import { getAuth, onAuthStateChanged,signOut } from "firebase/auth";
 
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { auth } from "./firebaseConfig";
 
 
@@ -10,23 +10,22 @@ import { auth } from "./firebaseConfig";
 
 export const useAuthenticate = async () =>{
 
-  const router = useRouter()
+  
    onAuthStateChanged(auth, (user) => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
         const uid = user.uid;
-        const role = localStorage.getItem("role")
-        console.log(uid)
-        return {userId:uid,role:role}
+      
+        return {userId:uid}
         
         // ...
       } else {
         // User is signed out
         // ...
-  router.push('../')
-        console.log('not logged in')
 
+        console.log('not logged in')
+       redirect('../')
 
       }
     });
