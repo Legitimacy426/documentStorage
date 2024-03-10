@@ -30,7 +30,7 @@ import Swal from "sweetalert2"
 const storage = getStorage(app)
 
 export default function Component({params}) {
-  useAuthenticate()
+  // useAuthenticate()
 // hooks=============================
 
 const {cards,isPendingC,isErrorC} = useFetchAll('documents',params.fid)
@@ -171,10 +171,10 @@ const [success, setSuccess] = useState(null);
                   <span className="peer">Folders</span>
           </Link>
           </li>
-       
+{/*        
         <li>
         <Button onClick={handleLogout} className="w-full">Logout</Button>
-        </li>
+        </li> */}
         </ul>
       </div>
     </div>
@@ -242,9 +242,6 @@ const [success, setSuccess] = useState(null);
           </Link>
         </li>
       
-        <li>
-        <Button onClick={handleLogout} className="w-full">Logout</Button>
-        </li>
     </ul>
   </div>
 </div>
@@ -263,7 +260,7 @@ const [success, setSuccess] = useState(null);
  <form action="">
  <div className="space-y-2">
 <label htmlFor="">New document</label>
-            <input className="file-input file-input-bordered w-full "  id="folder"  onChange={handleChange} multiple required type="file" />
+            <input className="file-input file-input-bordered w-full "  onChange={handleChange} multiple required type="file" />
   </div>
   <div className="space-y-2 my-2">
   <Button className="w-full" onClick={(e)=>{handleUpload(e)}}>Upload file</Button>

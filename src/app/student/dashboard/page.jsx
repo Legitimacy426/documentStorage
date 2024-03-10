@@ -25,7 +25,7 @@ import Swal from "sweetalert2"
 
 export default function Component() {
  
- useAuthenticate()
+//  useAuthenticate()
 // hooks=============================
 
 
@@ -133,7 +133,7 @@ const [folderName,setFolder] = useState('')
         </label>
       </div> 
       <div className="flex-1 px-2 mx-2">DocSTORE</div>
-      <div className="flex-none hidden lg:block">
+      {/* <div className="flex-none hidden lg:block">
         <ul className="menu menu-horizontal">
     
       
@@ -141,7 +141,7 @@ const [folderName,setFolder] = useState('')
         <Button onClick={handleLogout} className="w-full">Logout</Button>
         </li>
         </ul>
-      </div>
+      </div> */}
     </div>
     {/* Page content here */}
     <div className="flex-1 flex flex-col min-h-0">
@@ -180,14 +180,12 @@ const [folderName,setFolder] = useState('')
           </div>
         </div>
   </div> 
-  <div className="drawer-side">
+  {/* <div className="drawer-side">
     <label htmlFor="my-drawer-3" aria-label="close sidebar" className="drawer-overlay"></label> 
     <ul className="menu p-4 w-80 min-h-full bg-base-200">
-    <li>
-        <Button onClick={handleLogout} className="w-full">Logout</Button>
-        </li>
+   
     </ul>
-  </div>
+  </div> */}
 </div>
     
 
@@ -204,7 +202,7 @@ const [folderName,setFolder] = useState('')
  <form action="">
  <div className="space-y-2">
             <Label htmlFor="email">Folder name</Label>
-            <Input value={folderName} id="folder" placeholder="Enter folder name" onChange={(e)=>{setFolder(e.target.value)}} required type="text" />
+            <Input value={folderName} placeholder="Enter folder name" onChange={(e)=>{setFolder(e.target.value)}} required type="text" />
   </div>
   <div className="space-y-2 my-2">
   <Button className="w-full" onClick={(e)=>{handleNewFolder(e)}}>Create folder</Button>
