@@ -24,14 +24,16 @@ import Errors from "@/components/Errors"
 import Swal from "sweetalert2"
 
 export default function Component() {
+  let role
+  if(typeof window !== 'undefined'){
+    // now access your localStorage
+   
+    role = localStorage.getItem("role")
+  }
  useAuthenticate()
 // hooks=============================
-let role
-if(typeof window !== 'undefined'){
-  // now access your localStorage
- 
-  role = localStorage.getItem("role")
-}
+
+
 
 
  
