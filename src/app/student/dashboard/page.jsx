@@ -168,7 +168,7 @@ const [folderName,setFolder] = useState('')
                <Link className=" inset-0 relative" href={`./f/${card.folderName}`} >
                <CardContent className="flex flex-col items-center justify-center p-8 relative">
                  <FolderIcon className="w-12 h-12 text-gray-500" />
-                 <span className="text-sm font-medium mt-2 peer">{card.folderName}</span>
+                 <span className="text-sm font-medium mt-2 peer">{card.label}</span>
               
                </CardContent>
                </Link>
