@@ -57,7 +57,7 @@ const [folderName,setFolder] = useState('')
     console.log(selectedOption.id)
    
     // navigate here
-    router.push(`/admin/f/${selectedOption.folderName}`)
+    router.push(`/student/f/${selectedOption.folderName}`)
 
   };  const handleDelete = (id) => {
     
@@ -152,6 +152,7 @@ const [folderName,setFolder] = useState('')
               <SearchIcon className="w-4 h-4 text-gray-500" />
               <SearchableSelect
           tag={'folders'}
+          uri={"students"}
           fil={undefined}
            value={selectedOption}
            onChange={handlesearch}

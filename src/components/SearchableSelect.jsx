@@ -6,7 +6,7 @@ import React from 'react';
 import Select from 'react-select';
 
 
-const SearchableSelect = ({tag,onChange, value,fil }) => {
+const SearchableSelect = ({tag,onChange, value,fil,uri }) => {
  
   let data
   const {cards} = useFetchAll(tag,fil)
