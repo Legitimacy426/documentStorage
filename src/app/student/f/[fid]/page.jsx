@@ -166,7 +166,7 @@ const [success, setSuccess] = useState(null);
           {/* Navbar menu content here */}
          
           <li>
-          <Link className="flex items-center gap-2 font-medium rounded-md p-3" href="/admin/dashboard">
+          <Link className="flex items-center gap-2 font-medium rounded-md p-3" href="/student/dashboard">
                   <FolderIcon className="w-4 h-4" />
                   <span className="peer">Folders</span>
           </Link>
